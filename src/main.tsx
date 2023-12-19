@@ -6,7 +6,7 @@ import Home from "./screens/Home.tsx";
 import Add from "./screens/Add.tsx";
 import { Route } from "lucide-react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Edit from "./screens/edit.tsx";
+import Edit from "./screens/Edit.tsx";
 
 const router = createBrowserRouter([
   {

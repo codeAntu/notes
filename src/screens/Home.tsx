@@ -33,7 +33,7 @@ export default function Home() {
             <div
               key={note.id}
               className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 p-2.5 rounded-2xl text-ellipsis "
-              onClick={() => navigate("/edit", {{ state: note }})}
+              onClick={() => navigate("/edit", { state: note })}
             >
               {getNote(note)}
             </div>
