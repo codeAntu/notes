@@ -130,7 +130,7 @@ export default function Edit() {
                 }}
               />
               <Button
-                text="Huu"
+                text="Delete"
                 onClick={() => {
                   delNote();
                   window.history.back();
