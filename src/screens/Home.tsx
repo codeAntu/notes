@@ -10,7 +10,7 @@ export default function Home() {
   const [searchedNotes, setSearchedNotes] = useState([]) as any;
 
   useEffect(() => {
-    const notes = localStorage.getItem("notes");
+    const notes = localStorage.getItem("myNotes");
     if (notes) {
       setNotes(JSON.parse(notes).reverse());
     }
@@ -25,8 +25,10 @@ export default function Home() {
     setSearchedNotes(temp);
   }, [search]);
 
+  console.log(notes, "home");
+
   return (
-    <div className="p-5 dark:bg-black h-[100dvh] text-black  dark:text-white">
+    <div className="p-5 dark:bg-black min-h-[100dvh] text-black  dark:text-white">
       <div className="flex items-center justify-between px-5 py-2 ">
         <div className="text-3xl font-bold text-blue-700">Notes</div>
         <div className="flex items-center gap-5">
@@ -57,34 +59,10 @@ export default function Home() {
               }}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4 mt-10 auto-cols-min">
-            {searchedNotes.map((note: any) => {
-              return (
-                <div
-                  key={note.id}
-                  className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 p-2.5 rounded-2xl text-ellipsis "
-                  onClick={() => navigate("/edit", { state: note })}
-                >
-                  {getNote(note)}
-                </div>
-              );
-            })}
-          </div>
+          {showNotes(searchedNotes, navigate)}
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 mt-10 auto-cols-min">
-          {notes.map((note: any) => {
-            return (
-              <div
-                key={note.id}
-                className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 p-2.5 rounded-2xl text-ellipsis "
-                onClick={() => navigate("/edit", { state: note })}
-              >
-                {getNote(note)}
-              </div>
-            );
-          })}
-        </div>
+        showNotes(notes, navigate)
       )}
 
       <Link to="/add">
@@ -92,6 +70,24 @@ export default function Home() {
           <Plus size={30} />
         </div>
       </Link>
+    </div>
+  );
+}
+
+function showNotes(notes: any, navigate: any) {
+  return (
+    <div className="grid grid-cols-2 gap-4 mt-10 auto-cols-min">
+      {notes.map((note: any) => {
+        return (
+          <div
+            key={note.id}
+            className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 p-2.5 rounded-2xl text-ellipsis "
+            onClick={() => navigate("/edit", { state: note })}
+          >
+            {getNote(note)}
+          </div>
+        );
+      })}
     </div>
   );
 }

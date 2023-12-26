@@ -1,15 +1,7 @@
 import { useLoaderData, useLocation, useSubmit } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Check,
-  ChevronLeft,
-  Delete,
-  Pencil,
-  Save,
-  Trash,
-  Trash2,
-} from "lucide-react";
+import { Check, ChevronLeft, Pencil, Trash2 } from "lucide-react";
 import Button from "../component/Button";
 
 export default function Edit() {
@@ -25,36 +17,40 @@ export default function Edit() {
   console.log(state);
 
   useEffect(() => {
-    const notes = localStorage.getItem("notes");
+    const notes = localStorage.getItem("myNotes");
     if (notes) {
       setNotes(JSON.parse(notes));
     }
   }, []);
 
-  function editNote() {
-    if (title === "" || content === "") {
-      alert("Please fill all the fields");
-      return;
-    }
-
-    const note = {
-      title,
-      content,
-      id: Date.now(),
-    };
-
-    setId(note.id);
-    const temp = notes.filter((note: any) => note.id !== id);
-    const newNotes = [...temp, note];
-    setNotes(newNotes);
-    localStorage.setItem("notes", JSON.stringify(newNotes));
-  }
-
   function delNote() {
     const temp = notes.filter((note: any) => note.id !== id);
     setNotes(temp);
-    localStorage.setItem("notes", JSON.stringify(temp));
+    localStorage.setItem("myNotes", JSON.stringify(temp));
   }
+
+  useEffect(() => {
+    if (title === "" && content === "") {
+      setNotes((prevNotes: any) => {
+        const newNotes = prevNotes.filter((n: any) => n.id !== id);
+        localStorage.setItem("myNotes", JSON.stringify(newNotes));
+        return newNotes;
+      });
+    } else if (title !== "" || content !== "") {
+      const note = {
+        title,
+        content,
+        id,
+      };
+
+      setNotes((prevNotes: any) => {
+        const newNotes = prevNotes.filter((n: any) => n.id !== note.id);
+        newNotes.push(note);
+        localStorage.setItem("myNotes", JSON.stringify(newNotes));
+        return newNotes;
+      });
+    }
+  }, [title, content]);
 
   return (
     <div className="bg-white dark:bg-black text-black dark:text-white">
@@ -67,7 +63,7 @@ export default function Edit() {
           <div className="flex gap-5 pr-5">
             {isEdited ? (
               <Check
-                onClick={() => editNote()}
+                onClick={() => window.history.back()}
                 size={28}
                 strokeWidth={2.2}
                 className="text-blue-700"
